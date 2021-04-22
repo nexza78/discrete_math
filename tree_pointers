@@ -1,0 +1,137 @@
+#include<iostream>
+#include<stack>
+
+class TreeP{
+public:
+    TreeP() = default;
+    ~TreeP();
+
+    void writeAll();
+    void push(int val);
+    bool is_inside(int val);
+    bool is_empty();
+
+private:
+    struct  Node{
+        int data_ = 0;
+        Node *left_ = nullptr;
+        Node *right_ = nullptr;
+    };
+    Node *root_ = nullptr;
+    void dfs_for_write_(Node* root);
+    bool for_is_inside_(int val, Node *cur_pointer);
+};
+
+int main() {
+    TreeP a;
+    std::cout << a.is_empty() << ' ' << a.is_inside(89);
+    std::cout << '\n';
+    a.push(34);
+    a.push(89);
+    a.push(9);
+    std::cout << a.is_empty() << ' ' << a.is_inside(89);
+    std::cout << '\n';
+    a.push(-78);
+    a.push(67);
+    a.writeAll();
+    std::cout << '\n';
+    std::cout << a.is_empty() << ' ' << a.is_inside(4561);
+}
+
+
+TreeP::~TreeP(){
+    if (root_ == nullptr)
+    {
+        return;
+    }
+    std::stack<Node*> s;
+    s.push(root_);
+
+    while (!s.empty())
+    {
+        Node* temp = s.top();
+        s.pop();
+
+        if (temp->right_ != nullptr)
+            s.push(temp->right_);
+        if (temp->left_ != nullptr)
+            s.push(temp->left_);
+
+        delete temp;
+    }
+}
+
+bool TreeP::is_empty() {
+    return root_ == nullptr;
+}
+
+bool TreeP::is_inside(int val) {
+    return for_is_inside_(val, root_);
+}
+
+bool TreeP::for_is_inside_(int val, Node *cur_pointer) {
+    if (cur_pointer == nullptr)
+    {
+        return false;
+    }
+
+    while (true) {
+        if (cur_pointer->data_ == val) {
+            return true;
+        }
+
+        if (val <= cur_pointer->data_) {
+            return for_is_inside_(val, cur_pointer->left_);
+        }
+        else {
+            return for_is_inside_(val, cur_pointer->right_);
+        }
+    }
+}
+
+void TreeP::writeAll() {
+    dfs_for_write_(root_);
+}
+
+
+void TreeP::dfs_for_write_(Node* cur_pointer) {
+    if (cur_pointer == nullptr)
+    {
+        return;
+    }
+
+    dfs_for_write_(cur_pointer->left_);
+    std::cout << cur_pointer->data_ << ' ';
+    dfs_for_write_(cur_pointer->right_);
+}
+
+void TreeP::push(int val) {
+    if (root_ == nullptr)
+    {
+        root_ = new Node;
+        root_->data_ = val;
+        return;
+    }
+    Node *cur_el = root_;
+    while (true) {
+        if (val <= cur_el->data_) {
+            if (cur_el->left_ != nullptr)
+                cur_el = cur_el->left_;
+            else {
+                cur_el->left_ = new Node;
+                cur_el->left_->data_ = val;
+                break;
+            }
+        }
+        else {
+            if (cur_el->right_ != nullptr)
+                cur_el = cur_el->right_;
+            else {
+                cur_el->right_ = new Node;
+                cur_el->right_->data_ = val;
+                break;
+            }
+        }
+    }
+}
+
