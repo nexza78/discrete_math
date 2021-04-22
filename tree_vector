@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <stack>
 
 
 class STree {
@@ -8,7 +7,6 @@ public:
 	STree() = default;
 	~STree() = default;
 	void push(int rhs);
-	bool for_inside(int rhs, std::ptrdiff_t k, bool flag);
 	bool is_inside(int rhs);
 	bool is_empty();
 	void write_all();
@@ -20,6 +18,7 @@ private:
 	};
 	std::vector<Node> data = std::vector<Node>(100);
 	void dfs_for_write(std::ptrdiff_t k);
+	bool for_inside(int rhs, std::ptrdiff_t k);
 };
 
 
@@ -34,9 +33,8 @@ int main()
 	a.push(6);
 	a.write_all();
 	std::cout << '\n';
-	a.write_all();
-	std::cout << '\n';
 	std::cout << a.is_inside(5);
+	std::cout << a.is_inside(-456);
 }
 
 void STree::push(int rhs) {
@@ -78,18 +76,22 @@ void STree::write_all() {
 }
 
 
-bool STree::for_inside(int rhs, std::ptrdiff_t k, bool flag) {
+bool STree::for_inside(int rhs, std::ptrdiff_t k) {
 	if (data[k].count) {
 		if (data[k].value == rhs) {
-			flag = 1;
+			return true;
 		}
-		for_inside(rhs, k * 2 + 1, flag);
-		for_inside(rhs, k * 2 + 2, flag);
+
+		if (rhs <= data[k].value) {
+			return for_inside(rhs, k * 2 + 1);
+		}
+		else {
+			return for_inside(rhs, k * 2 + 2);
+		}
 	}
-	return flag;
+	return false;
 }
 
 bool STree::is_inside(int rhs) {
 	return for_inside(rhs, 0);
 }
-
