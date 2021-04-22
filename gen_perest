@@ -1,0 +1,27 @@
+#include <iostream>
+#include <vector>
+#include <cstdlib>
+#include <ctime>
+
+
+int main()
+{
+    int n = 0, m = 0;
+    std::cin >> n;
+    std::vector<int> init_perest(n, 0);
+
+    std::srand(std::time(nullptr));
+    int random_variable = std::rand();
+
+    for (int i = 0; i < n; i++) {
+        init_perest[i] = i;
+    }
+    for (int i = 0; i < n - 1; i++) {
+        std::swap(init_perest[i], init_perest[std::rand() % n]);
+    }
+
+    for (int i : init_perest) {
+        std::cout << i << ' ';
+    }
+}
+
