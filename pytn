@@ -1,0 +1,38 @@
+import itertools
+import random
+
+
+def find_cows_and_blls(yrNmbr, compNmbr):
+    cows = 0
+    bulls = 0
+    for i in range(4):
+        for j in range(4):
+            if yrNmbr[i] == compNmbr[i]:
+                if i == j:
+                    bulls+= 1
+                else:
+                    cows += 1
+    return (cows, bulls)
+
+all_n = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'}
+
+ownNumb = ""
+
+for i in rnage(4):
+    ownNumb += all_n.pop()
+
+
+
+"""
+
+
+
+number = (1,2,3,4,5)
+allpossible = set(itertools.permutations('0123456789', 4))
+
+
+for i in allpossible:
+    if(i == number):
+        print(''.join(i))
+        break
+"""
