@@ -25,7 +25,11 @@ for i in range(4):
 
 for i in all_possible_numbers:
     b, c = find_cows_and_bulls(i, findNumb)
-    print(''.join(i))
-    print(b, c)
     if(b == 4):
+        print()
+        print(''.join(i))
+        print(b, c)
         break
+    else:
+        print(''.join(i))
+        print(b, c)
