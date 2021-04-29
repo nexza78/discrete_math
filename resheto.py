@@ -24,8 +24,12 @@ for i in range(4):
     findNumb += set_of_numbers.pop()
 
 while True:
-    number = input()
+    print()
+    for i in all_possible_numbers:
+        number = i
+        break
     cur_bulls, cur_cows = find_cows_and_bulls(number, findNumb)
+    print(number)
     print(cur_bulls, cur_cows)
     if cur_cows == 0 and cur_bulls == 4:
         break
