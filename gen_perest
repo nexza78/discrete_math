@@ -6,7 +6,7 @@
 
 int main()
 {
-    int n = 0, m = 0;
+    int n = 0;
     std::cin >> n;
     std::vector<int> init_perest(n, 0);
 
