@@ -1,0 +1,133 @@
+#include<iostream>
+#include<stack>
+
+class Tree {
+public:
+    Tree() = default;
+    ~Tree();
+
+    void print();
+    void push(int val);
+    bool in_tree(int val);
+    bool empty();
+
+private:
+    struct  Node {
+        int data_ = 0;
+        Node* left_ = nullptr;
+        Node* right_ = nullptr;
+    };
+    Node* root_ = nullptr;
+    void for_print_(Node* root);
+    bool for_in_tree_(int val, Node* cur_pointer);
+};
+
+int main() {
+    Tree t;
+    std::cout << t.empty() << ' ' << t.in_tree(10) << '\n';
+    t.push(10);
+    std::cout << t.empty() << ' ' << t.in_tree(10) << '\n';
+    t.push(-78);
+    t.push(67);
+    t.push(9);
+    t.print();
+    std::cout << '\n';
+    std::cout << t.in_tree(504);
+}
+
+
+Tree::~Tree() {
+    if (root_ == nullptr)
+    {
+        return;
+    }
+    std::stack<Node*> s;
+    s.push(root_);
+
+    while (!s.empty())
+    {
+        Node* temp = s.top();
+        s.pop();
+
+        if (temp->right_ != nullptr)
+            s.push(temp->right_);
+        if (temp->left_ != nullptr)
+            s.push(temp->left_);
+
+        delete temp;
+    }
+}
+
+bool Tree::empty() {
+    return root_ == nullptr;
+}
+
+bool Tree::in_tree(int val) {
+    return for_in_tree_(val, root_);
+}
+
+bool Tree::for_in_tree_(int val, Node* cur_pointer) {
+    if (cur_pointer == nullptr)
+    {
+        return false;
+    }
+
+    while (true) {
+        if (cur_pointer->data_ == val) {
+            return true;
+        }
+
+        if (val <= cur_pointer->data_) {
+            return for_in_tree_(val, cur_pointer->left_);
+        }
+        else {
+            return for_in_tree_(val, cur_pointer->right_);
+        }
+    }
+}
+
+void Tree::print() {
+    for_print_(root_);
+}
+
+
+void Tree::for_print_(Node* cur_pointer) {
+    if (cur_pointer == nullptr)
+    {
+        return;
+    }
+
+    for_print_(cur_pointer->left_);
+    std::cout << cur_pointer->data_ << ' ';
+    for_print_(cur_pointer->right_);
+}
+
+void Tree::push(int val) {
+    if (root_ == nullptr)
+    {
+        root_ = new Node;
+        root_->data_ = val;
+        return;
+    }
+    Node* cur_el = root_;
+    while (true) {
+        if (val <= cur_el->data_) {
+            if (cur_el->left_ != nullptr)
+                cur_el = cur_el->left_;
+            else {
+                cur_el->left_ = new Node;
+                cur_el->left_->data_ = val;
+                break;
+            }
+        }
+        else {
+            if (cur_el->right_ != nullptr)
+                cur_el = cur_el->right_;
+            else {
+                cur_el->right_ = new Node;
+                cur_el->right_->data_ = val;
+                break;
+            }
+        }
+    }
+}
