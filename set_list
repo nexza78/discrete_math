@@ -1,0 +1,137 @@
+#include<iostream>
+
+
+class Set {
+public:
+	Set() = default;
+	~Set() noexcept;
+
+	void pop(int rhs) noexcept(false);
+	void add(const int& rhs) noexcept;
+	void print();
+	bool empty() const noexcept;
+	bool in_set(int rhs) const noexcept;
+
+private:
+	struct Node {
+		Node* next{ nullptr };
+		int value = 0;
+	};
+	Node* head_{ nullptr };
+};
+
+int main()
+{
+	Set mn;
+	std::cout << mn.empty() << '\n';
+	mn.add(-7);
+	mn.add(5);
+	mn.add(-200);
+	mn.add(5046);
+	mn.print();
+	std::cout << '\n';
+	std::cout << mn.empty() << '\n';
+	std::cout << mn.in_set(-7) << ' ';
+	mn.pop(-7);
+	std::cout << mn.in_set(-7);
+}
+
+Set::~Set() noexcept {
+	if (empty()) {
+		return;
+	}
+	while (head_ != nullptr) {
+		Node* new_head = head_->next;
+		delete head_;
+		head_ = new_head;
+	}
+}
+
+bool Set::empty()const noexcept {
+	return (head_ == nullptr);
+}
+
+void Set::pop(int rhs) noexcept(false) {
+	if (empty()) {
+		std::cout << "Set is empty";
+		return;
+	}
+	Node* cur_el = head_;
+	if (cur_el->value == rhs) {
+		Node* new_head = head_->next;
+		delete head_;
+		head_ = new_head;
+		return;
+	}
+	while (cur_el->next != nullptr) {
+		if (cur_el->next->value == rhs) {
+			Node* next_next_point = cur_el->next->next;
+			delete cur_el->next;
+			cur_el->next = next_next_point;
+			return;
+		}
+		else {
+			cur_el = cur_el->next;
+		}
+	}
+}
+
+void Set::add(const int& rhs) noexcept {
+	if (in_set(rhs)) {
+		return;
+	}
+	//Node* old_head = head_;
+	//head_ = new Node;
+	//head_->next = old_head;
+	//head_->value = rhs;
+	Node* cur_el = head_;
+	if (empty()) {
+		Node* old_head = head_;
+		head_ = new Node;
+		head_->next = old_head;
+		head_->value = rhs;
+		return;
+	}
+	if (cur_el->value > rhs) {
+		Node* old_head = head_;
+		head_ = new Node;
+		head_->next = old_head;
+		head_->value = rhs;
+		return;
+	}
+	while (cur_el->next != nullptr) {
+		if (cur_el->next->value >= rhs) {
+			Node* temp = cur_el->next;
+			cur_el->next = new Node;
+			cur_el->next->value = rhs;
+			cur_el->next->next = temp;
+			return;
+			break;
+		}
+		else {
+			cur_el = cur_el->next;
+		}
+	}
+	cur_el->next = new Node;
+	cur_el->next->value = rhs;
+}
+
+bool Set::in_set(int rhs) const noexcept {
+	Node* cur_el = head_;
+	while (cur_el != nullptr) {
+		if (cur_el->value == rhs) {
+			return true;
+			break;
+		}
+		cur_el = cur_el->next;
+	}
+	return false;
+}
+
+void Set::print() {
+	Node* cur_el = head_;
+	while (cur_el != nullptr) {
+		std::cout << cur_el->value << ' ';
+		cur_el = cur_el->next;
+	}
+}
